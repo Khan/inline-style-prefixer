@@ -36,7 +36,17 @@ function gatherInformation() {
   flexPropsIE.forEach(function(prop) {
     delete prefixProperties.ie[prop]
   })
-  return 'var caniuseData = ' + JSON.stringify(prefixProperties) + '; module.exports = caniuseData';
+
+  const prefixes = {};
+  browsers.forEach(function(browser) {
+    if (prefixProperties[browser]) {
+      Object.keys(prefixProperties[browser]).forEach(function(key) {
+        prefixes[key] = 0;
+      });
+    }
+  });
+
+  return 'module.exports = ' + JSON.stringify(prefixes) + ';';
 }
 
 fs.writeFile('./lib/caniuseData.js', gatherInformation(), function(err) {

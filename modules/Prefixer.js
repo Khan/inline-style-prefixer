@@ -4,15 +4,8 @@ import assign from './utils/assign'
 import caniuseData from './caniuseData'
 import plugins from './Plugins'
 
-const prefixes = {}
+const prefixes = caniuseData;
 const browserInfo = getBrowserInformation()
-
-browserInfo.browsers.forEach(browser => {
-  let data = caniuseData[browser]
-  if (data) {
-    assign(prefixes, data)
-  }
-})
 
 export default class Prefixer {
   /**
@@ -33,7 +26,7 @@ export default class Prefixer {
         browsers.forEach(browser => {
           let style = browserInfo.prefixes[browser]
           // add prefixes if needed
-          if (prefixes[property]) {
+          if (prefixes[property] != null) {
             styles[style.inline + capitalizeString(property)] = value
           }
         })
