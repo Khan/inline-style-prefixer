@@ -1,4 +1,3 @@
-import bowser from 'bowser'
 
 const vendorPrefixes = {
   Webkit: [ 'chrome', 'safari', 'ios', 'android', 'phantom', 'opera', 'webos', 'blackberry', 'bada', 'tizen' ],
@@ -66,77 +65,19 @@ const getPrefixes = browser => {
  * Evaluates bowser info and adds vendorPrefix information
  * @param {string} userAgent - userAgent that gets evaluated
  */
-export default userAgent => {
-  if (!userAgent) {
-    return false
-  }
-
+export default () => {
   let info = { }
 
-  // Special user agent, return all supported prefixes
-  // instead of returning a string browser name and a prefix object
-  // we return an array of browser names and map of prefixes for each browser
-  if (userAgent === '*') {
-    // Return an array of supported browsers
-    info.browsers = Object.keys(browsers)
+  // Return an array of supported browsers
+  info.browsers = Object.keys(browsers)
 
-    // Return prefixes associated by browser
-    info.prefixes = { }
+  // Return prefixes associated by browser
+  info.prefixes = { }
 
-    // Iterate browser list, assign prefix to each
-    info.browsers.forEach(browser => {
-      info.prefixes[browser] = getPrefixes(browser)
-    })
-
-    return info
-  }
-
-  // Normal user agent, detect browser
-  info = bowser._detect(userAgent)
-
-  Object.keys(vendorPrefixes).forEach(prefix => {
-    vendorPrefixes[prefix].forEach(browser => {
-      if (info[browser]) {
-        info.prefix = {
-          inline: prefix,
-          css: '-' + prefix.toLowerCase() + '-'
-        }
-      }
-    })
+  // Iterate browser list, assign prefix to each
+  info.browsers.forEach(browser => {
+    info.prefixes[browser] = getPrefixes(browser)
   })
-
-  let name = ''
-  Object.keys(browsers).forEach(browser => {
-    browsers[browser].forEach(condition => {
-      let match = 0
-      condition.forEach(single => {
-        if (info[single]) {
-          match += 1
-        }
-      })
-      if (condition.length === match) {
-        name = browser
-      }
-    })
-  })
-
-  info.browser = name
-  // For cordova IOS 8 the version is missing, set truncated osversion to prevent NaN
-  info.version = info.version ? parseFloat(info.version) : parseInt(parseFloat(info.osversion), 10)
-
-  // seperate native android chrome
-  // https://github.com/rofrischmann/inline-style-prefixer/issues/45
-  if (info.browser === 'android' && info.chrome && info.version > 37) {
-    info.browser = 'and_chr'
-  }
-  info.version = parseFloat(info.version)
-  info.osversion = parseFloat(info.osversion)
-  // For android < 4.4 we want to check the osversion
-  // not the chrome version, see issue #26
-  // https://github.com/rofrischmann/inline-style-prefixer/issues/26
-  if (info.browser === 'android' && info.osversion < 5) {
-    info.version = info.osversion
-  }
 
   return info
 }

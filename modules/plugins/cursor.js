@@ -6,24 +6,12 @@ const values = {
 }
 
 export default function cursor(pluginInterface) {
-  const { property, value, browserInfo, prefix, keepUnprefixed, forceRun } = pluginInterface
-  const { browser, version } = browserInfo
+  const { property, value, prefix, keepUnprefixed } = pluginInterface
 
   if (
-    property === 'cursor' && values[value] &&
-    (
-    forceRun ||
-    browser === 'firefox' && version < 24 ||
-    browser === 'chrome' && version < 37 ||
-    browser === 'safari' && version < 9 ||
-    browser === 'opera' && version < 24
-    )
+    property === 'cursor' && values[value]
   ) {
-    let newValue = forceRun ?
-      // prefix all
-      [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + property + ':') :
-      // default
-      prefix.css + value
+    let newValue = [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + property + ':')
     return {
       cursor: newValue + (keepUnprefixed ? ';' + property + ':' + value : '')
     }

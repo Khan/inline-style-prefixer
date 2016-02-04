@@ -19,19 +19,10 @@ const properties = Object.keys(alternativeProps).concat(['alignContent', 'alignS
 
 
 export default function flexboxOld(pluginInterface) {
-  const {property, value, styles, browserInfo, prefix, keepUnprefixed, forceRun} = pluginInterface
-  const {browser, version} = browserInfo
+  const {property, value, styles, prefix, keepUnprefixed} = pluginInterface
 
   if (
-    properties[property] &&
-    (
-    forceRun ||
-    browser === 'firefox' && version < 22 ||
-    browser === 'chrome' && version < 21 ||
-    (browser === 'safari' || browser === 'ios_saf') && version <= 6.1 ||
-    browser === 'android' && version < 4.4 ||
-    browser === 'and_uc'
-    )
+    properties[property]
   ) {
     if (!keepUnprefixed) {
       delete styles[property]

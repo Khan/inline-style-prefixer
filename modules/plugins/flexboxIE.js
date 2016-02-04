@@ -20,14 +20,10 @@ const alternativeProps = {
 const properties = Object.keys(alternativeProps).concat('display').reduce((result, prop) => ({...result, [prop]: true}), {})
 
 export default function flexboxIE(pluginInterface) {
-  const {property, value, styles, browserInfo, prefix, keepUnprefixed, forceRun} = pluginInterface
-  const {browser, version} = browserInfo
+  const {property, value, styles, prefix, keepUnprefixed} = pluginInterface
 
   if (
-    properties[property] &&
-    (
-    forceRun ||
-    (browser === 'ie_mob' || browser === 'ie') && version == 10)
+    properties[property]
   ) {
     if (!keepUnprefixed) {
       delete styles[property]
