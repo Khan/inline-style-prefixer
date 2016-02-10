@@ -86,4 +86,27 @@ describe('Combine all supported browser prefixes', () => {
     }
     expect(Prefixer.prefixAll(input)).to.eql(output)
   })
+
+  it('should camel-case properties in strings', () => {
+    const input = {
+      marginLeft: 'calc(50%)',
+      backgroundImage: 'linear-gradient(135deg, red, blue)',
+      alignContent: 'flex-end',
+      maxWidth: 'min-content',
+    }
+    const output = {
+      marginLeft: '-webkit-calc(50%);margin-left:-moz-calc(50%);margin-left:calc(50%)',
+
+      backgroundImage: '-webkit-linear-gradient(135deg, red, blue);background-image:-moz-linear-gradient(135deg, red, blue);background-image:linear-gradient(135deg, red, blue)',
+
+      alignContent: 'end;align-content:flex-end',
+      MozAlignContent: 'flex-end',
+      WebkitAlignContent: 'flex-end',
+      msAlignContent: 'flex-end',
+      msFlexLinePack: 'end',
+
+      maxWidth: '-webkit-min-content;max-width:-moz-min-content;max-width:min-content'
+    }
+    expect(Prefixer.prefixAll(input)).to.eql(output)
+  })
 })

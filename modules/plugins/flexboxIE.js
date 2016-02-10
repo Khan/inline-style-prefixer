@@ -1,3 +1,5 @@
+import camelToDashCase from '../utils/camelToDashCase'
+
 const alternativeValues = {
   'space-around': 'distribute',
   'space-between': 'justify',
@@ -25,6 +27,8 @@ export default function flexboxIE(pluginInterface) {
   if (
     properties[property]
   ) {
+    const dashCaseProperty = camelToDashCase(property)
+
     if (!keepUnprefixed) {
       delete styles[property]
     }
@@ -36,7 +40,7 @@ export default function flexboxIE(pluginInterface) {
     }
     if (alternativeValues[value]) {
       return {
-        [property]: alternativeValues[value] + (keepUnprefixed ? ';' + property + ':' + value : '')
+        [property]: alternativeValues[value] + (keepUnprefixed ? ';' + dashCaseProperty + ':' + value : '')
       }
     }
   }

@@ -1,3 +1,5 @@
+import camelToDashCase from '../utils/camelToDashCase'
+
 const properties = {
   maxHeight: true,
   maxWidth: true,
@@ -21,9 +23,11 @@ export default function sizing(pluginInterface) {
   // This might change in the future
   // Keep an eye on it
   if (properties[property] && values[value]) {
-    let newValue = [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + property + ':')
+    const dashCaseProperty = camelToDashCase(property)
+
+    let newValue = [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + dashCaseProperty + ':')
     return {
-      [property]: newValue + (keepUnprefixed ? ';' + property + ':' + value : '')
+      [property]: newValue + (keepUnprefixed ? ';' + dashCaseProperty + ':' + value : '')
     }
   }
 }

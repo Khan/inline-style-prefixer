@@ -1,3 +1,5 @@
+import camelToDashCase from '../utils/camelToDashCase'
+
 const alternativeValues = {
   'space-around': 'justify',
   'space-between': 'justify',
@@ -24,6 +26,8 @@ export default function flexboxOld(pluginInterface) {
   if (
     properties[property]
   ) {
+    const dashCaseProperty = camelToDashCase(property)
+
     if (!keepUnprefixed) {
       delete styles[property]
     }
@@ -35,7 +39,7 @@ export default function flexboxOld(pluginInterface) {
     }
     if (property === 'display' && alternativeValues[value]) {
       return {
-        display: prefix.css + alternativeValues[value] + (keepUnprefixed ? ';' + property + ':' + value : '')
+        display: prefix.css + alternativeValues[value] + (keepUnprefixed ? ';' + dashCaseProperty + ':' + value : '')
       }
     }
     if (alternativeProps[property]) {
@@ -45,7 +49,7 @@ export default function flexboxOld(pluginInterface) {
     }
     if (alternativeValues[value]) {
       return {
-        [property]: alternativeValues[value] + (keepUnprefixed ? ';' + property + ':' + value : '')
+        [property]: alternativeValues[value] + (keepUnprefixed ? ';' + dashCaseProperty + ':' + value : '')
       }
     }
   }

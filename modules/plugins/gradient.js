@@ -1,3 +1,5 @@
+import camelToDashCase from '../utils/camelToDashCase'
+
 const values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/
 
 export default function gradient(pluginInterface) {
@@ -6,9 +8,11 @@ export default function gradient(pluginInterface) {
   if (
     typeof value === 'string' && value.match(values) !== null
   ) {
-    let newValue = [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + property + ':')
+    const dashCaseProperty = camelToDashCase(property)
+
+    let newValue = [ '-webkit-', '-moz-' ].map(prefix => prefix + value).join(';' + dashCaseProperty + ':')
     return {
-      [property]: newValue + (keepUnprefixed ? ';' + property + ':' + value : '')
+      [property]: newValue + (keepUnprefixed ? ';' + dashCaseProperty + ':' + value : '')
     }
   }
 }
